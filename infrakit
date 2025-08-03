@@ -1,0 +1,2 @@
+#!/bin/bash
+java -jar "$HOME/projects/InfraKit/build/libs/InfraKit-1.0-SNAPSHOT-all.jar" "$@"
