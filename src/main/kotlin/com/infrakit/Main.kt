@@ -1,10 +1,13 @@
 package com.infrakit
 
+import com.infrakit.utils.ParserUtil
+
 
 fun main(args: Array<String>) {
-    if (args.isNotEmpty() && args[0].equals("init", ignoreCase = true)) {
-        println("Project created")
-    } else {
-        println("Usage: infrakit init")
+    if (args.isEmpty() || args[0] != "init") {
+        println("Usage: infrakit init --name=<project> --package=<package>")
+        return
     }
+
+    ParserUtil.doInit(args)
 }
