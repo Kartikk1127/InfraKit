@@ -7,26 +7,31 @@ object TemplateGenerator {
     fun copyAndReplace(
         source: File,
         dest: File,
-        variables: Map<String, String>
+        variables: Map<String, String>,
+        relPath: String = ""
     ) {
-        // Calculate the destination folder/file name with replacement
-        var destPath = replaceVarsInPath(dest.path, variables)
+        val relative = relPath.ifEmpty { "" }
+        var destPath = replaceVarsInPath(relative, variables)
+
+        // If it's a file with .ftl, remove .ftl in output
         if (source.isFile && destPath.endsWith(".ftl")) {
             destPath = destPath.removeSuffix(".ftl")
         }
-        val actualDest = File(destPath)
+        val actualDest = File(dest, destPath)
 
         if (source.isDirectory) {
             actualDest.mkdirs()
             source.listFiles()?.forEach { child ->
-                copyAndReplace(child, File(actualDest, child.name), variables)
+                val childRelPath = if (relative.isEmpty()) child.name else "$relative/${child.name}"
+                copyAndReplace(child, dest, variables, childRelPath)
             }
         } else {
-            // Copy file, replace placeholders in content
             var content = source.readText()
             variables.forEach { (key, value) ->
                 content = content.replace("{{${key}}}", value)
             }
+            // Ensure parent directory exists
+            actualDest.parentFile.mkdirs()
             actualDest.writeText(content)
         }
     }
