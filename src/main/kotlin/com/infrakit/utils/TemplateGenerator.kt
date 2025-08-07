@@ -10,7 +10,10 @@ object TemplateGenerator {
         variables: Map<String, String>
     ) {
         // Calculate the destination folder/file name with replacement
-        val destPath = replaceVarsInPath(dest.path, variables)
+        var destPath = replaceVarsInPath(dest.path, variables)
+        if (source.isFile && destPath.endsWith(".ftl")) {
+            destPath = destPath.removeSuffix(".ftl")
+        }
         val actualDest = File(destPath)
 
         if (source.isDirectory) {
