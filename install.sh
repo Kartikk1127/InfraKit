@@ -34,4 +34,4 @@ if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
 fi
 
 echo "✅ InfraKit installed successfully!"
-echo "👉 You can now run: infrakit init"
+echo "👉 You can now run: infrakit init --name=<name of the project> --package=<package>"
